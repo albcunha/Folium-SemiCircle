@@ -7,7 +7,7 @@ import json
 from branca.element import Figure, JavascriptLink
 
 from folium.map import Marker
-from folium.utilities import _validate_location
+from folium.utilities import validate_location
 
 from jinja2 import Template
 
@@ -50,7 +50,7 @@ class SemiCircle(Marker):
             """)
 
     def __init__(self, location, radius=0, direction=0, arc=0, startAngle=0, stopAngle=0, **kwargs):
-        super(SemiCircle, self).__init__( _validate_location(location), **kwargs)
+        super(SemiCircle, self).__init__( validate_location(location), **kwargs)
         self._name = 'SemiCircle'
         self.radius = radius
         self.direction = direction
