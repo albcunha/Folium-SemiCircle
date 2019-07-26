@@ -24,6 +24,16 @@ class SemiCircle(Marker):
         If None, then the middle of the map is used.
     radius: int, default 0
         Radius of semicircle
+    fill: boolean, default True
+        Fills semicircle with a color.
+    fill_color: string, default '#3388ff'
+        Sets fill color if fill color set to True
+    fill_opacity: float, default 0.5
+        Sets opacity level. 0 is none, 1 is full.
+    color: string, default '#3388ff'
+        Sets line/border color. 
+    opacity = float, default 1
+        Sets opacity of line/border
     direction: int, default 0
         Heading of direction angle value between 0 and 360 degrees
     arc: int, default 0
@@ -38,27 +48,61 @@ class SemiCircle(Marker):
                 if ({{this.direction}} || {{this.arc}}) {
                     var {{this.get_name()}} = L.semiCircle(
                         [{{this.location[0]}},{{this.location[1]}}],
-                        {radius:{{this.radius}}}).setDirection({{this.direction}},{{this.arc}})
+                        {radius:{{this.radius}},
+                        fill: {{this.fill}},
+                        fillColor:'{{this.fill_color}}',
+                        fillOpacity: {{this.fill_opacity}},
+                        color: '{{this.color}}',
+                        opacity: {{this.opacity}}
+                        }).setDirection({{this.direction}},{{this.arc}})
                         .addTo({{this._parent.get_name()}});
                 } else if ({{this.startAngle}} || {{this.stopAngle}}) {
                     var {{this.get_name()}} = L.semiCircle(
                         [{{this.location[0]}},{{this.location[1]}}],
-                        {radius:{{this.radius}}, startAngle:{{this.startAngle}}, stopAngle:{{this.stopAngle}}})
+                        {radius:{{this.radius}},
+                        fill: {{this.fill}},
+                        fillColor:'{{this.fill_color}}',
+                        fillOpacity: {{this.fill_opacity}},
+                        color: '{{this.color}}',
+                        opacity: {{this.opacity}},
+                        startAngle:{{this.startAngle}}, 
+                        stopAngle:{{this.stopAngle}}
+                        })
                         .addTo({{this._parent.get_name()}});
                 }
             {% endmacro %}
             """)
 
-    def __init__(self, location, radius=0, direction=0, arc=0, startAngle=0, stopAngle=0, **kwargs):
-        super(SemiCircle, self).__init__( _validate_location(location), **kwargs)
+    def __init__(self, 
+                location, 
+                radius=0, 
+                fill = True,  
+                fill_color='#3388ff', 
+                fill_opacity = 0.5,
+                color = '#3388ff',
+                opacity = 1,
+                direction=0, 
+                arc=0, 
+                startAngle=0, 
+                stopAngle=0, **kwargs):
+                
+        super(SemiCircle, self).__init__( validate_location(location), **kwargs)
         self._name = 'SemiCircle'
         self.radius = radius
+        if fill == True:
+            self.fill = 'true'
+        else: self.fill = 'false'
+        self.fill_color = fill_color
+        self.fill_opacity = fill_opacity
+        self.color = color
+        self.opacity = opacity
         self.direction = direction
         self.arc = arc
         self.startAngle = startAngle
         self.stopAngle = stopAngle
+        self.fill_color = fill_color
         self.kwargs = json.dumps(kwargs)
-
+        
     def render(self, **kwargs):
         super(SemiCircle, self).render(**kwargs)
 
